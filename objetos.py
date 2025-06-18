@@ -34,7 +34,7 @@ keypoints_list = []
 descriptors_list = []
 
 for i in range(1, total_images + 1):
-    filename = f"objetos-{i}.jpg"
+    filename = f"foto-{i}.jpg"
     path = os.path.join(folder, filename)
 
     img = cv2.imread(path)
@@ -146,11 +146,11 @@ model = load_model('cnn_cifar10_model.h5')
 classes = ['avião', 'carro', 'pássaro', 'gato', 'veado',
            'cachorro', 'sapo', 'cavalo', 'navio', 'caminhão']
 
-folder_classify = 'classify_images'
+folder_images = 'images'
 
-for filename in os.listdir(folder_classify):
+for filename in os.listdir(folder_images):
     if filename.endswith(('.jpg', '.jpeg', '.png')):
-        path = os.path.join(folder_classify, filename)
+        path = os.path.join(folder_images, filename)
 
         # ================================
         # Carregamento e Pré-processamento
