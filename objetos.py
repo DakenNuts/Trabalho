@@ -1,6 +1,3 @@
-# ====================
-# IMPORTAÇÃO DE BIBLIOTECAS
-# ====================
 import cv2
 import numpy as np
 import os
@@ -10,9 +7,8 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras import layers, models
 from tensorflow.keras.utils import to_categorical
 
-
 # ====================
-# FUNÇÃO DE EXIBIÇÃO DAS IMAGENS
+# EXIBIÇÃO DAS IMAGENS
 # ====================
 def show_process_pipeline(titles, images):
     plt.figure(figsize=(5 * len(images), 10))
@@ -27,10 +23,9 @@ def show_process_pipeline(titles, images):
     plt.tight_layout()
     plt.show()
 
-
-# ======================================
-# PROCESSAMENTO DAS IMAGENS (VISÃO COMPUTACIONAL)
-# ======================================
+# =========================
+# PROCESSAMENTO DAS IMAGENS
+# =========================
 folder = "images"
 total_images = 10
 
@@ -110,19 +105,15 @@ for i in range(1, total_images + 1):
 print("\n=== PROCESSAMENTO FINALIZADO ===")
 print(f"Total de imagens processadas: {len(processed_images)}")
 
-
 # ==============================
 # TREINAMENTO DE MODELO CNN (IA)
 # ==============================
-
 # Carregar CIFAR-10
 (x_train, y_train), (x_test, y_test) = tf.keras.datasets.cifar10.load_data()
 
-# Normalizar imagens para [0, 1]
 x_train = x_train.astype('float32') / 255.0
 x_test = x_test.astype('float32') / 255.0
 
-# One-hot encode das labels
 y_train = to_categorical(y_train, 10)
 y_test = to_categorical(y_test, 10)
 
@@ -147,28 +138,23 @@ model.fit(x_train, y_train, epochs=10, batch_size=64, validation_data=(x_test, y
 # Salvar modelo
 model.save('cnn_cifar10_model.h5')
 
-
 # =================================
 # CLASSIFICAÇÃO DE IMAGENS EXTERNAS
 # =================================
-
-# Carregar modelo salvo
 model = load_model('cnn_cifar10_model.h5')
 
-# Classe CIFAR-10
 classes = ['avião', 'carro', 'pássaro', 'gato', 'veado',
            'cachorro', 'sapo', 'cavalo', 'navio', 'caminhão']
 
-# Pasta com imagens para classificação
 folder_classify = 'classify_images'
 
 for filename in os.listdir(folder_classify):
     if filename.endswith(('.jpg', '.jpeg', '.png')):
         path = os.path.join(folder_classify, filename)
 
-        # ==============================
+        # ================================
         # Carregamento e Pré-processamento
-        # ==============================
+        # ================================
         img = cv2.imread(path)
         if img is None:
             print(f"Imagem não carregada: {filename}")
@@ -180,16 +166,16 @@ for filename in os.listdir(folder_classify):
 
         img_input = np.expand_dims(img_normalized, axis=0)
 
-        # ==============================
+        # ========
         # Predição
-        # ==============================
+        # ========
         pred = model.predict(img_input)
         class_id = np.argmax(pred)
         confidence = pred[0][class_id]
 
-        # ==============================
+        # =========
         # Resultado
-        # ==============================
+        # =========
         print(f"\nImagem: {filename}")
         print(f"Classe prevista: {classes[class_id]}")
         print(f"Confiança: {confidence:.2f}")
